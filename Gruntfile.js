@@ -30,9 +30,9 @@ module.exports = function (grunt) {
         files: ['test/spec/{,*/}*.coffee'],
         tasks: ['coffee:test']
       },
-      compass: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-        tasks: ['compass:server', 'autoprefixer']
+      less: {
+        files: ['<%= yeoman.app %>/styles/{,*/}*.less'],
+        tasks: ['less:server', 'autoprefixer']
       },
       styles: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
@@ -150,26 +150,16 @@ module.exports = function (grunt) {
       }
     },
 
-    // Compiles SASS/SCSS files to CSS using Compass.
-    compass: {
+    // Compiles “styles/main.less”.
+    less: {
       options: {
-        sassDir: '<%= yeoman.app %>/styles',
-        cssDir: '.tmp/styles',
-        generatedImagesDir: '.tmp/images/generated',
-        imagesDir: '<%= yeoman.app %>/images',
-        javascriptsDir: '<%= yeoman.app %>/scripts',
-        fontsDir: '<%= yeoman.app %>/fonts',
-        importPath: '<%= yeoman.app %>/bower_components',
-        httpImagesPath: '/images',
-        httpGeneratedImagesPath: '/images/generated',
-        httpFontsPath: '/fonts',
-        relativeAssets: false
+        paths: ['<%= yeoman.app %>/bower_components'],
       },
-      dist: {},
       server: {
-        options: {
-          debugInfo: true
-        }
+        files: [{
+          src: '<%= yeoman.app %>/styles/main.less',
+          dest: '.tmp/styles/main.css'
+        }]
       }
     },
 
@@ -308,17 +298,17 @@ module.exports = function (grunt) {
     concurrent: {
       server: [
         'coffee:dist',
-        'compass:server',
+        'less:server',
         'copy:styles'
       ],
       test: [
         'coffee',
-        'compass',
+        'less',
         'copy:styles'
       ],
       dist: [
         'coffee',
-        'compass:dist',
+        'less:dist',
         'copy:styles',
         'imagemin',
         'svgmin',

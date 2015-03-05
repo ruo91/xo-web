@@ -1,0 +1,28 @@
+.grid
+  .panel.panel-default
+    p.page-title
+      i.fa.fa-clock-o
+      |  Scheduler
+form.form-horizontal
+  .grid
+    .panel.panel-default
+      .panel-heading.panel-title
+        i.fa.fa-cogs(style="color: #e25440;")
+        |  Task
+      .panel-body
+        .form-group
+          label.col-sm-3.control-label Action
+          .col-sm-9
+            select.form-control
+              option(value = '') -- Choose an action --
+        .form-group
+          label.col-sm-3.control-label Target
+          .col-sm-9
+            select.form-control
+              option(value = '') -- Choose a target object --
+    .panel.panel-default
+      .panel-heading.panel-title
+        i.fa.fa-clock-o(style="color: #e25440;")
+        |  Schedule
+      .panel-body
+        p TODO ...

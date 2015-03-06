@@ -25,4 +25,74 @@ form.form-horizontal
         i.fa.fa-clock-o(style="color: #e25440;")
         |  Schedule
       .panel-body
-        p TODO ...
+        accordion(close-others= 'false', ng-click = 'scheduler.update()')
+          accordion-group
+            accordion-heading Minute
+            tabset
+              tab(select = 'scheduler.formData.min = "all"')
+                tab-heading every minute
+              tab(select = 'scheduler.formData.min = "range"')
+                tab-heading every N minutes
+                br
+                .form-group
+                  label.col-sm-2.control-label {{ scheduler.formData.minRange }}
+                  .col-sm-10
+                    input.form-control(type = 'range', min = '2', max = '59', step = '1', ng-model = 'scheduler.formData.minRange', ng-change = 'scheduler.update()')
+              tab(select = 'scheduler.formData.min = "select"')
+                tab-heading each selected minute
+                br
+                table.table.table-bordered
+                  tr(ng-repeat = 'line in scheduler.minutes')
+                    td(ng-click = 'scheduler.selectMinute(min)', ng-class = '{"bg-success": scheduler.isSelectedMinute(min)}',ng-repeat = 'min in line') {{ min }}
+          accordion-group
+            accordion-heading Hour
+            tabset
+              tab(select = 'scheduler.formData.hour = "all"')
+                tab-heading every hour
+              tab(select = 'scheduler.formData.hour = "range"')
+                tab-heading every N hour
+                br
+                .form-group
+                  label.col-sm-2.control-label {{ scheduler.formData.hourRange }}
+                  .col-sm-10
+                    input.form-control(type = 'range', min = '2', max = '23', step = '1', ng-model = 'scheduler.formData.hourRange', ng-change = 'scheduler.update()')
+              tab(select = 'scheduler.formData.hour = "select"')
+                tab-heading each selected hour
+                br
+                table.table.table-bordered
+                  tr(ng-repeat = 'line in scheduler.hours')
+                    td(ng-click = 'scheduler.selectHour(hour)', ng-class = '{"bg-success": scheduler.isSelectedHour(hour)}',ng-repeat = 'hour in line') {{ hour }}
+          accordion-group
+            accordion-heading Day of the month
+            tabset
+              tab(select = 'scheduler.formData.day = "all"')
+                tab-heading every day
+              tab(select = 'scheduler.formData.day = "select"')
+                tab-heading each selected day
+                br
+                table.table.table-bordered
+                  tr(ng-repeat = 'line in scheduler.days')
+                    td(ng-click = 'scheduler.selectDay(day)', ng-class = '{"bg-success": scheduler.isSelectedDay(day)}',ng-repeat = 'day in line') {{ day }}
+          accordion-group
+            accordion-heading Month
+            tabset
+              tab(select = 'scheduler.formData.month = "all"')
+                tab-heading every month
+              tab(select = 'scheduler.formData.month = "select"')
+                tab-heading each selected month
+                br
+                table.table.table-bordered
+                  tr(ng-repeat = 'line in scheduler.months')
+                    td(ng-click = 'scheduler.selectMonth(month.v)', ng-class = '{"bg-success": scheduler.isSelectedMonth(month.v)}',ng-repeat = 'month in line') {{ month.l }}
+          accordion-group
+            accordion-heading Day of week
+            tabset
+              tab(select = 'scheduler.formData.dayWeek = "all"')
+                tab-heading every day of week
+              tab(select = 'scheduler.formData.dayWeek = "select"')
+                tab-heading each selected day of week
+                br
+                table.table.table-bordered
+                  tr
+                    td(ng-click = 'scheduler.selectDayWeek(dayWeek.v)', ng-class = '{"bg-success": scheduler.isSelectedDayWeek(dayWeek.v)}',ng-repeat = 'dayWeek in scheduler.dayWeeks') {{ dayWeek.l }}
+        input.form-control(type ='text', readonly, ng-model = 'scheduler.formData.cronPattern')

@@ -11,15 +11,22 @@ form.form-horizontal
         |  Task
       .panel-body
         .form-group
-          label.col-sm-3.control-label Action
+          label.col-sm-3.control-label {{ schAction ? (schAction.group + ".") : "Action" }}
           .col-sm-9
-            select.form-control
+            select.form-control(ng-model = 'schAction', ng-options = 'action.command group by action.group for action in scheduler.actions')
               option(value = '') -- Choose an action --
-        .form-group
-          label.col-sm-3.control-label Target
-          .col-sm-9
-            select.form-control
-              option(value = '') -- Choose a target object --
+            p.helper-block(ng-if = 'schAction.info.description') {{ schAction.info.description }}
+
+        div(ng-if = 'schAction')
+          .form-group(ng-repeat = '(name, param) in schAction.info.params')
+            label.col-sm-3.control-label
+             | {{ name }}
+             span(ng-if = '!param.optional', style="color: #e25440;") &nbsp;*
+            .col-sm-9
+              input.form-control(ng-if = 'param.type === "string"', type = 'text', ng-model = 'scheduler.formData[name]', ng-required = '!param.optional')
+              input.form-control(ng-if = 'param.type === "integer"', type = 'number', ng-model = 'scheduler.formData[name]', ng-required = '!param.optional')
+              input(ng-if = 'param.type === "boolean"', type = 'checkbox', ng-model = 'scheduler.formData[name]')
+
     .panel.panel-default
       .panel-heading.panel-title
         i.fa.fa-clock-o(style="color: #e25440;")
@@ -96,3 +103,36 @@ form.form-horizontal
                   tr
                     td(ng-click = 'scheduler.selectDayWeek(dayWeek.v)', ng-class = '{"bg-success": scheduler.isSelectedDayWeek(dayWeek.v)}',ng-repeat = 'dayWeek in scheduler.dayWeeks') {{ dayWeek.l }}
         input.form-control(type ='text', readonly, ng-model = 'scheduler.formData.cronPattern')
+  //- Summary
+  .grid
+    .panel.panel-default
+      .panel-heading.panel-title
+        i.fa.fa-flag-checkered(style="color: #e25440;")
+        |  Summary
+      .panel-body
+        p {{ schAction.info.actionName }} scheduled to run :
+        p {{ scheduler.formData.summary }}
+        //.grid
+          .grid-cell
+            p.stat-name
+              | Name:
+            p.center.big {{formData.srName}}
+          .grid-cell
+            p.stat-name
+              | Type:
+            p.center.big {{formData.srType}}
+          .grid-cell
+            div(ng-if = 'formData.srType === "iSCSI"')
+              p.stat-name Size
+              p.center.big {{formData.srIScsiId.size | bytesToSize}}
+            div(ng-if = 'formData.srType === "NFS"')
+              p.stat-name Path
+              p.center.big {{formData.srPath.path}}
+        p.center
+          button.btn.btn-lg.btn-primary.disabled(type="button")
+            i.fa.fa-clock-o
+            | &nbsp;
+            i.fa.fa-arrow-right
+            | &nbsp;
+            i.fa.fa-database
+            | &nbsp;Save Task&nbsp;
